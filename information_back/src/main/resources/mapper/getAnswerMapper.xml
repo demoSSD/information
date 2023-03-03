@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heeexy.example.dao.GetAnswerDao">
+    <select id="getAnswerById" resultType="com.alibaba.fastjson.JSONObject">
+        select answer,type from answer where question = #{question}
+    </select>
+    <select id="getList" resultType="com.alibaba.fastjson.JSONObject">
+        select question from answer order by rand() limit 5
+    </select>
+    <select id="getNewQuestion" resultType="com.alibaba.fastjson.JSONObject">
+        select id,question,create_time from answer order by create_time desc
+        limit 5
+    </select>
+</mapper>
+

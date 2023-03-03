@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heeexy.example.dao.NewClassifyDao">
+    <select id="getAllClassify" resultType="com.alibaba.fastjson.JSONObject">
+        select id,name  from queclassify where delete_status=1;
+    </select>
+    <select id="getTags" resultType="com.alibaba.fastjson.JSONObject">
+        select id,name,classify from tags where classify=#{classify_id} and delete_status=1;
+    </select>
+    <select id="getAllTags" resultType="com.alibaba.fastjson.JSONObject">
+        select id,name,classify from tags where  delete_status=1;
+    </select>
+    <insert id="addClassify" parameterType="com.alibaba.fastjson.JSONObject">
+            insert into queclassify(name) values
+            <foreach collection="list" index="index" separator="," item="item">
+                (#{item})
+            </foreach>
+    </insert>
+    <insert id="addTagsByClassify" parameterType="com.alibaba.fastjson.JSONObject">
+        insert into tags(name,classify) values
+        <foreach collection="list" index="index" separator="," item="item">
+            (#{item.tag},#{item.classify_id})
+        </foreach>
+    </insert>
+    <update id="deleteTag" >
+        UPDATE tags SET delete_status=2 WHERE name = #{tagName} and classify=#{classifyId}
+    </update>
+</mapper>
+

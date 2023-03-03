@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heeexy.example.dao.NewReplyDao">
+    <insert id="addReply" parameterType="com.heeexy.example.util.model.Reply" keyProperty="id" useGeneratedKeys="true">
+        insert into reply(question_id, reply_id, content) values (#{question_id},#{reply_id},#{content})
+    </insert>
+    <select id="getQuestionReply" resultType="com.alibaba.fastjson.JSONObject">
+        select id,reply_id,nickname as name,content,accept,thumb_u as up,avatar,
+               thumb_d as down, DATE_FORMAT(reply_info.created_time,'%Y-%c-%d %H:%i') as created_time
+        from reply_info where question_id=#{questionId}
+        <choose>
+            <when test="sort==0">
+                order by  thumb_u desc
+            </when>
+            <when test="sort==1">
+                order by created_time desc
+            </when>
+        </choose>
+    </select>
+    <select id="getUserReply" resultType="com.alibaba.fastjson.JSONObject">
+        select id,reply_id,nickname as name,content,accept,thumb_u as up,question_id,
+        thumb_d as down, DATE_FORMAT(reply_info.created_time,'%Y-%c-%d %H:%i') as created_time
+        from reply_info where reply_id=#{userId} order by created_time desc
+    </select>
+    <update id="updateAccept" >
+        UPDATE reply SET accept=#{type},delete_status=#{isDelete}  where id=#{id}
+    </update>
+</mapper>
+

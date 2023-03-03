@@ -1,0 +1,29 @@
+spring:
+  profiles: local
+  datasource:
+      url: jdbc:mysql://localhost:3306/information?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+      username: root
+      password: 123456
+  mvc:
+    static-path-pattern: /image/**
+  resources:
+    static-locations: file:D:/HTML+CSS+JavaScript/vue/project/recommendation/img/
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+server:
+  port: 8080
+logging:
+  config: classpath:logback-local.xml
+baseUrl:
+  os:
+    windows:
+      image: "D:/HTML+CSS+JavaScript/vue/project/recommendation/img/"
+      video: "D:/HTML+CSS+JavaScript/vue/project/recommendation/video/"
+      file: "D:/HTML+CSS+JavaScript/vue/project/recommendation/file/"
+    linux:
+      image: "/sqa/img/"
+      video: "/usr/local/recommendation/video/"
+      file: "/usr/local/recommendation/file/"
+  api: "http://localhost:8080/image/"

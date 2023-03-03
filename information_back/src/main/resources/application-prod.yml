@@ -1,0 +1,36 @@
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://localhost:3306/chatroom?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  mvc:
+    static-path-pattern: /resources/**
+#  resources:
+#    static-locations: file:D:/HTML+CSS+JavaScript/vue/project/recommendation/img/
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+server:
+  port: 8099
+  tomcat:
+    connection-timeout: 180000
+
+logging:
+  config: classpath:logback-local.xml
+baseUrl:
+  os:
+    windows:
+      root: "D:/HTML+CSS+JavaScript/vue/project/recommendation/"
+      image: "D:/HTML+CSS+JavaScript/vue/project/recommendation/img/"
+      video: "D:/HTML+CSS+JavaScript/vue/project/recommendation/video/"
+      file: "D:/HTML+CSS+JavaScript/vue/project/recommendation/file/"
+    linux:
+      root: "/www/wwwroot/information/res/"
+      image: "/www/wwwroot/information/res/img/"
+      video: "/www/wwwroot/information/res/video/"
+      file: "/www/wwwroot/information/res/file/"
+  api: "http://localhost:8099/resources/"
+
+

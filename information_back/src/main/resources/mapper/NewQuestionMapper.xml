@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heeexy.example.dao.NewQuestionDao">
+    <insert id="addQuestion" parameterType="com.alibaba.fastjson.JSONObject">
+        insert into question(classify, tag,owner_id,title,content) values (#{classify},#{tags},#{user_id},#{title},#{content})
+    </insert>
+    <select id="getQuestionById" resultType="com.alibaba.fastjson.JSONObject">
+        select id,title,clicks,classify,tag,owner_id,nickname,up_nums,replys,accepts,content,avatar,
+               DATE_FORMAT(question_info.created_time,'%Y-%c-%d %H:%i') as created_time
+        from question_info where id=#{questionId}
+    </select>
+    <select id="getQuestion" resultType="com.alibaba.fastjson.JSONObject">
+        select id,title,clicks,classify,tag,owner_id,nickname,up_nums,replys,accepts,content,
+        DATE_FORMAT(question_info.created_time,'%Y-%c-%d %H:%i') as created_time
+               from question_info
+      <if test=" classify_id != 0 ">
+         where question_info.classify=#{classify_id}
+         <if test='tag!="全部"'>
+                AND question_info.tag like '%${tag}%'
+         </if>
+      </if>
+        <choose>
+            <when test="sort==0">
+                order by question_info.created_time  desc
+            </when>
+            <when test="sort==1">
+                order by clicks desc
+            </when>
+            <when test="sort==2">
+                order by replys desc
+            </when>
+            <when test="sort==3">
+                order by accepts desc
+            </when>
+        </choose>
+
+    </select>
+    <select id="getQuestion_NoAccept" resultType="com.alibaba.fastjson.JSONObject">
+        select id,title,clicks,classify,tag,owner_id,nickname,up_nums,replys,accepts,content,
+               DATE_FORMAT(question_info.created_time,'%Y-%c-%d %H:%i') as created_time
+        from question_info where (accepts is null or accepts=0)
+        <if test=" classify_id != 0 ">
+           and question_info.classify=#{classify_id}
+            <if test='tag!="全部"'>
+                AND question_info.tag like '%${tag}%'
+            </if>
+        </if>
+        order by created_time desc
+    </select>
+    <select id="exits" resultType="java.lang.Integer">
+        select type from thumbs where user_id=#{userId} and question_id=#{questionId} and delete_status=1 limit 0,1
+    </select>
+    <update id="updateClicks" >
+        UPDATE question SET clicks=clicks+1 WHERE id = #{questionId}
+    </update>
+    <select id="getQuestionByUser" resultType="com.alibaba.fastjson.JSONObject">
+        select id,title,clicks,classify,tag,owner_id,nickname,up_nums,replys,accepts,content,avatar,
+               DATE_FORMAT(question_info.created_time,'%Y-%c-%d %H:%i') as created_time
+        from question_info where owner_id=#{userId} order by created_time desc
+    </select>
+    <update id="deleteQuestion" >
+        UPDATE question SET delete_status=2 WHERE id = #{questionId}
+    </update>
+</mapper>
+
